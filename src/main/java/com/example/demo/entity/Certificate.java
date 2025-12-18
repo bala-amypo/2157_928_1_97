@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -9,17 +10,22 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student {
+public class Certificate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @ManyToOne
+    private Student student;
+
+    @ManyToOne
+    private CertificateTemplate template;
+
+    private LocalDate issuedDate;
+
+    private String qrCodeUrl;
 
     @Column(unique = true)
-    private String email;
-
-    @Column(unique = true)
-    private String rollNumber;
+    private String verificationCode;
 }

@@ -9,17 +9,18 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student {
+public class CertificateTemplate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     @Column(unique = true)
-    private String email;
+    private String templateName;
 
-    @Column(unique = true)
-    private String rollNumber;
+    private String backgroundUrl;
+
+    private String fontStyle;
+
+    private String signatureName;
 }

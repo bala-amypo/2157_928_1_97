@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -9,17 +10,18 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Student {
+public class VerificationLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @ManyToOne
+    private Certificate certificate;
 
-    @Column(unique = true)
-    private String email;
+    private LocalDateTime verifiedAt;
 
-    @Column(unique = true)
-    private String rollNumber;
+    private String status;
+
+    private String ipAddress;
 }
