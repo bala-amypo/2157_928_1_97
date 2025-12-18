@@ -1,0 +1,21 @@
+package com.example.demo.service;
+
+import com.example.demo.entity.User;
+import com.example.demo.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+
+    public User register(User user) {
+        return userRepository.save(user);
+    }
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
+    }
+}
