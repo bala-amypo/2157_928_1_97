@@ -4,23 +4,18 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CertificateTemplate {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
-    private String templateName;
+    private String name;
 
-    private String backgroundUrl;
-
-    private String fontStyle;
-
-    private String signatureName;
+    @Lob
+    private String content;
 }
