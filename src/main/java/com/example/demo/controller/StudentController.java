@@ -2,27 +2,24 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Student;
 import com.example.demo.service.StudentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/students")
+@RequiredArgsConstructor
 public class StudentController {
 
-    private final StudentService service;
-
-    public StudentController(StudentService service) {
-        this.service = service;
-    }
+    private final StudentService studentService;
 
     @PostMapping
-    public Student add(@RequestBody Student student) {
-        return service.addStudent(student);
+    public Student addStudent(@RequestBody Student student) {
+        return studentService.addStudent(student);
     }
 
     @GetMapping
-    public List<Student> list() {
-        return service.getAllStudents();
+    public List<Student> getAll() {
+        return studentService.getAllStudents();
     }
 }

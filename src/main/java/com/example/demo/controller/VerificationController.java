@@ -2,29 +2,25 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.VerificationLog;
 import com.example.demo.service.VerificationService;
-import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
 @RequestMapping("/verify")
+@RequiredArgsConstructor
 public class VerificationController {
 
-    private final VerificationService service;
-
-    public VerificationController(VerificationService service) {
-        this.service = service;
-    }
+    private final VerificationService verificationService;
 
     @PostMapping("/{code}")
     public VerificationLog verify(@PathVariable String code,
-                                  HttpServletRequest request) {
-        return service.verifyCertificate(code, request.getRemoteAddr());
+                                  @RequestHeader("X-Client-IP") String ip) {
+        return verificationService.verifyCertificate(code, ip);
     }
 
     @GetMapping("/logs/{certificateId}")
     public List<VerificationLog> logs(@PathVariable Long certificateId) {
-        return service.getLogsByCertificate(certificateId);
+        return verificationService.getLogsByCertificate(certificateId);
     }
 }
