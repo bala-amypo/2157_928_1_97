@@ -17,7 +17,7 @@ public class TemplateController {
 
     private final TemplateService templateService;
 
-    // ✅ SHOWS: Add Template
+    // ✅ 1️⃣ ADD TEMPLATE (FIRST)
     @Operation(
         summary = "Add Template",
         description = "Create and save a new certificate template"
@@ -28,7 +28,7 @@ public class TemplateController {
         return templateService.addTemplate(template);
     }
 
-    // ✅ SHOWS: List All Templates
+    // ✅ 2️⃣ LIST ALL TEMPLATES (NEXT)
     @Operation(
         summary = "List All Templates",
         description = "Fetch all certificate templates"

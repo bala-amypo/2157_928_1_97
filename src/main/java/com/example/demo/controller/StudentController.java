@@ -17,7 +17,7 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // ✅ SHOWS: Add Student
+    // ✅ 1️⃣ ADD STUDENT (FIRST)
     @Operation(
         summary = "Add Student",
         description = "Create and save a new student"
@@ -27,10 +27,10 @@ public class StudentController {
         return studentService.addStudent(student);
     }
 
-    // ✅ SHOWS: List All Students
+    // ✅ 2️⃣ LIST ALL STUDENTS (NEXT)
     @Operation(
         summary = "List All Students",
-        description = "Fetch all students from database"
+        description = "Fetch all students"
     )
     @GetMapping
     public List<Student> getAllStudents() {
