@@ -18,24 +18,17 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // Add Student (POST first)
+    // Add Student (POST)
     @Operation(summary = "Add Student", description = "Create a new student")
     @PostMapping
     public Student addStudent(@Valid @RequestBody Student student) {
         return studentService.addStudent(student);
     }
 
-    // List All Students (GET next)
+    // List All Students (GET)
     @Operation(summary = "List All Students", description = "Get all students")
     @GetMapping
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
-    }
-
-    // Get Student by ID
-    @Operation(summary = "Get Student by ID", description = "Fetch student by ID")
-    @GetMapping("/{id}")
-    public Student getStudentById(@PathVariable Long id) {
-        return studentService.getStudentById(id);
     }
 }
