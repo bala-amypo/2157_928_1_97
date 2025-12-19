@@ -17,22 +17,16 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // ✅ 1️⃣ ADD STUDENT (FIRST)
+    // POST /students - add student
+    @Operation(summary = "Add Student", description = "Add a new student")
     @PostMapping
-    @Operation(
-            summary = "Add Student",
-            description = "Create and save a new student"
-    )
     public Student addStudent(@RequestBody Student student) {
         return studentService.addStudent(student);
     }
 
-    // ✅ 2️⃣ LIST ALL STUDENTS (NEXT)
+    // GET /students - list all students
+    @Operation(summary = "List All Students", description = "Get all students")
     @GetMapping
-    @Operation(
-            summary = "List All Students",
-            description = "Fetch all students"
-    )
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
