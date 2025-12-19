@@ -4,10 +4,10 @@ import com.example.demo.entity.Student;
 import com.example.demo.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,22 +18,22 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // 1️⃣ ADD STUDENT
+    // Add Student (POST first)
     @Operation(summary = "Add Student", description = "Create a new student")
     @PostMapping
     public Student addStudent(@Valid @RequestBody Student student) {
         return studentService.addStudent(student);
     }
 
-    // 2️⃣ LIST ALL STUDENTS
+    // List All Students (GET next)
     @Operation(summary = "List All Students", description = "Get all students")
     @GetMapping
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
 
-    // 3️⃣ GET STUDENT BY ID
-    @Operation(summary = "Get Student by ID", description = "Fetch student details by ID")
+    // Get Student by ID
+    @Operation(summary = "Get Student by ID", description = "Fetch student by ID")
     @GetMapping("/{id}")
     public Student getStudentById(@PathVariable Long id) {
         return studentService.getStudentById(id);
