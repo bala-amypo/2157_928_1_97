@@ -17,8 +17,8 @@ public class AuthController {
         return userService.register(user);
     }
 
-    @GetMapping("/login")
-    public User getByEmail(@PathVariable String email) {
+    @PostMapping("/login")
+    public User login(@RequestParam String email) {
         return userService.findByEmail(email);
     }
 }
