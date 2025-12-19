@@ -10,7 +10,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TemplateServiceImpl implements TemplateService {
-    private final TemplateRepository templateRepository;
+
+    private final CertificateTemplateRepository templateRepository;
 
     @Override
     public CertificateTemplate addTemplate(CertificateTemplate template) {
