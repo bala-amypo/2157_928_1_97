@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Certificate;
+
 import java.util.List;
 
 public interface CertificateService {
@@ -11,6 +12,5 @@ public interface CertificateService {
 
     Certificate getByVerificationCode(String verificationCode);
 
-    // 🔥 ADD THIS METHOD
     List<Certificate> getAllCertificates();
 }
