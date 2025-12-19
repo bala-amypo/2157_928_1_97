@@ -2,24 +2,19 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Certificate;
 import com.example.demo.service.CertificateService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/certificates")
-@RequiredArgsConstructor
-@Tag(name = "CertificateController", description = "Certificate management APIs")
 public class CertificateController {
 
     private final CertificateService certificateService;
 
-    // 🔹 POST /certificates/generate/{studentId}/{templateId}
-    @Operation(
-            summary = "Create Certificate",
-            description = "Generate certificate using studentId and templateId"
-    )
+    public CertificateController(CertificateService certificateService) {
+        this.certificateService = certificateService;
+    }
+
+    // POST /certificates/generate/{studentId}/{templateId}
     @PostMapping("/generate/{studentId}/{templateId}")
     public Certificate generateCertificate(
             @PathVariable Long studentId,
@@ -28,27 +23,15 @@ public class CertificateController {
         return certificateService.generateCertificate(studentId, templateId);
     }
 
-    // 🔹 GET /certificates/{certificateId}
-    @Operation(
-            summary = "Get Certificate Details",
-            description = "Fetch certificate details by certificate ID"
-    )
+    // GET /certificates/{certificateId}
     @GetMapping("/{certificateId}")
-    public Certificate getCertificateById(
-            @PathVariable Long certificateId) {
-
+    public Certificate getCertificate(@PathVariable Long certificateId) {
         return certificateService.getCertificateById(certificateId);
     }
 
-    // 🔹 GET /certificates/verify/code/{verificationCode}
-    @Operation(
-            summary = "Fetch Certificate By Verification Code",
-            description = "Get certificate using verification code"
-    )
+    // GET /certificates/verify/code/{verificationCode}
     @GetMapping("/verify/code/{verificationCode}")
-    public Certificate getCertificateByVerificationCode(
-            @PathVariable String verificationCode) {
-
+    public Certificate getByVerificationCode(@PathVariable String verificationCode) {
         return certificateService.getByVerificationCode(verificationCode);
     }
 }

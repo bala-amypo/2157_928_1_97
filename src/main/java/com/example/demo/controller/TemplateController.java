@@ -2,31 +2,27 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.service.TemplateService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/templates")
-@RequiredArgsConstructor
-@Tag(name = "TemplateController", description = "Certificate template management APIs")
 public class TemplateController {
 
     private final TemplateService templateService;
 
-    // 1️⃣ ADD TEMPLATE
-    @Operation(summary = "Add Template", description = "Create and save a new certificate template")
+    public TemplateController(TemplateService templateService) {
+        this.templateService = templateService;
+    }
+
+    // POST /templates
     @PostMapping
-    public CertificateTemplate addTemplate(@Valid @RequestBody CertificateTemplate template) {
+    public CertificateTemplate addTemplate(@RequestBody CertificateTemplate template) {
         return templateService.addTemplate(template);
     }
 
-    // 2️⃣ LIST ALL TEMPLATES
-    @Operation(summary = "List All Templates", description = "Fetch all certificate templates")
+    // GET /templates
     @GetMapping
     public List<CertificateTemplate> getAllTemplates() {
         return templateService.getAllTemplates();
