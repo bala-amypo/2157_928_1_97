@@ -7,8 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/certificates")
 @RequiredArgsConstructor
@@ -17,33 +15,40 @@ public class CertificateController {
 
     private final CertificateService certificateService;
 
-    // 1️⃣ Create certificate
-    @Operation(summary = "Create Certificate", description = "Generate certificate for a student using template")
+    // 🔹 POST /certificates/generate/{studentId}/{templateId}
+    @Operation(
+            summary = "Create Certificate",
+            description = "Generate certificate using studentId and templateId"
+    )
     @PostMapping("/generate/{studentId}/{templateId}")
     public Certificate generateCertificate(
             @PathVariable Long studentId,
             @PathVariable Long templateId) {
+
         return certificateService.generateCertificate(studentId, templateId);
     }
 
-    // 2️⃣ Get certificate by ID
-    @Operation(summary = "Get Certificate Details", description = "Fetch certificate details by certificate ID")
+    // 🔹 GET /certificates/{certificateId}
+    @Operation(
+            summary = "Get Certificate Details",
+            description = "Fetch certificate details by certificate ID"
+    )
     @GetMapping("/{certificateId}")
-    public Certificate getCertificateById(@PathVariable Long certificateId) {
+    public Certificate getCertificateById(
+            @PathVariable Long certificateId) {
+
         return certificateService.getCertificateById(certificateId);
     }
 
-    // 3️⃣ Get certificate by verification code
-    @Operation(summary = "Fetch Certificate By Verification Code", description = "Get certificate using verification code")
+    // 🔹 GET /certificates/verify/code/{verificationCode}
+    @Operation(
+            summary = "Fetch Certificate By Verification Code",
+            description = "Get certificate using verification code"
+    )
     @GetMapping("/verify/code/{verificationCode}")
-    public Certificate getCertificateByVerificationCode(@PathVariable String verificationCode) {
-        return certificateService.getByVerificationCode(verificationCode);
-    }
+    public Certificate getCertificateByVerificationCode(
+            @PathVariable String verificationCode) {
 
-    // 4️⃣ Optional: List all certificates (if needed)
-    @Operation(summary = "List All Certificates", description = "Fetch all certificates")
-    @GetMapping
-    public List<Certificate> getAllCertificates() {
-        return certificateService.getAllCertificates();
+        return certificateService.getByVerificationCode(verificationCode);
     }
 }
