@@ -17,8 +17,8 @@ public class AuthController {
         return userService.register(user);
     }
 
-    @GetMapping("/email/{email}")
-    public User getByEmail(@PathVariable String email) {
-        return userService.findByEmail(email);
+    @GetMapping("/login/{login}")
+    public User getByLogin(@PathVariable String login) {
+        return userService.findByLogin(login);
     }
 }
