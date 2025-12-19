@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/certificates")
 @RequiredArgsConstructor
-@Tag(name = "CertificateController", description = "Certificate APIs")
+@Tag(name = "CertificateController", description = "Certificate management APIs")
 public class CertificateController {
 
     private final CertificateService certificateService;
 
-    // ✅ POST /certificates/generate/{studentId}/{templateId}
+    // 1️⃣ POST /generate/{studentId}/{templateId}
     @Operation(
-            summary = "Generate Certificate",
-            description = "Create certificate for student using template"
+        summary = "Create Certificate",
+        description = "Generate certificate for a student using template"
     )
     @PostMapping("/generate/{studentId}/{templateId}")
     public Certificate generateCertificate(
@@ -28,10 +28,10 @@ public class CertificateController {
         return certificateService.generateCertificate(studentId, templateId);
     }
 
-    // ✅ GET /certificates/{certificateId}
+    // 2️⃣ GET /{certificateId}
     @Operation(
-            summary = "Get Certificate",
-            description = "Get certificate details by ID"
+        summary = "Get Certificate Details",
+        description = "Fetch certificate details by certificate ID"
     )
     @GetMapping("/{certificateId}")
     public Certificate getCertificateById(
@@ -40,13 +40,13 @@ public class CertificateController {
         return certificateService.getCertificateById(certificateId);
     }
 
-    // ✅ GET /certificates/verify/code/{verificationCode}
+    // 3️⃣ GET /verify/code/{verificationCode}
     @Operation(
-            summary = "Verify Certificate",
-            description = "Verify certificate using verification code"
+        summary = "Fetch Certificate By Verification Code",
+        description = "Get certificate using verification code"
     )
     @GetMapping("/verify/code/{verificationCode}")
-    public Certificate getByVerificationCode(
+    public Certificate getCertificateByVerificationCode(
             @PathVariable String verificationCode) {
 
         return certificateService.getByVerificationCode(verificationCode);
