@@ -12,16 +12,15 @@ import java.util.List;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                // Server configuration (same style as OpenApiConfig)
-                .servers(List.of(
-                        new Server().url("https://9497.pro604cr.amypo.ai/")
-                ))
-                // Swagger Info
-                .info(new Info()
-                        .title("Demo API")
-                        .version("1.0")
-                        .description("API documentation for Demo project"));
-    }
+public OpenAPI customOpenAPI() {
+    return new OpenAPI()
+            .servers(List.of(
+                    new Server().url("https://9497.pro604cr.amypo.ai:9001/")
+            ))
+            .info(new Info()
+                    .title("Demo API")
+                    .version("1.0")
+                    .description("API documentation for Demo project"));
+}
+
 }
