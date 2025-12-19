@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,23 +18,24 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    // ✅ 1️⃣ ADD STUDENT (FIRST)
+    // 1️⃣ ADD STUDENT
+    @Operation(summary = "Add Student", description = "Create a new student")
     @PostMapping
-    @Operation(
-            summary = "Add Student",
-            description = "Create and save a new student"
-    )
-    public Student addStudent(@RequestBody Student student) {
+    public Student addStudent(@Valid @RequestBody Student student) {
         return studentService.addStudent(student);
     }
 
-    // ✅ 2️⃣ LIST ALL STUDENTS (NEXT)
+    // 2️⃣ LIST ALL STUDENTS
+    @Operation(summary = "List All Students", description = "Get all students")
     @GetMapping
-    @Operation(
-            summary = "List All Students",
-            description = "Fetch all students"
-    )
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
+    }
+
+    // 3️⃣ GET STUDENT BY ID
+    @Operation(summary = "Get Student by ID", description = "Fetch student details by ID")
+    @GetMapping("/{id}")
+    public Student getStudentById(@PathVariable Long id) {
+        return studentService.getStudentById(id);
     }
 }

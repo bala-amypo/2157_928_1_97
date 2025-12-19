@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -17,23 +18,16 @@ public class TemplateController {
 
     private final TemplateService templateService;
 
-    // ✅ 1️⃣ ADD TEMPLATE (FIRST)
+    // 1️⃣ ADD TEMPLATE
+    @Operation(summary = "Add Template", description = "Create and save a new certificate template")
     @PostMapping
-    @Operation(
-            summary = "Add Template",
-            description = "Create and save a new certificate template"
-    )
-    public CertificateTemplate addTemplate(
-            @RequestBody CertificateTemplate template) {
+    public CertificateTemplate addTemplate(@Valid @RequestBody CertificateTemplate template) {
         return templateService.addTemplate(template);
     }
 
-    // ✅ 2️⃣ LIST ALL TEMPLATES (NEXT)
+    // 2️⃣ LIST ALL TEMPLATES
+    @Operation(summary = "List All Templates", description = "Fetch all certificate templates")
     @GetMapping
-    @Operation(
-            summary = "List All Templates",
-            description = "Fetch all certificate templates"
-    )
     public List<CertificateTemplate> getAllTemplates() {
         return templateService.getAllTemplates();
     }
