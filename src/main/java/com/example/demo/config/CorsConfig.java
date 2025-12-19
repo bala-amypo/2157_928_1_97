@@ -13,8 +13,8 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedOrigins("*") // or your domain: https://9497.pro604cr.amypo.ai
+                registry.addMapping("/**") // allow all endpoints
+                        .allowedOrigins("*") // allow Swagger & external apps
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*");
             }
