@@ -18,22 +18,22 @@ public class TemplateController {
     private final TemplateService templateService;
 
     // ✅ 1️⃣ ADD TEMPLATE (FIRST)
-    @Operation(
-        summary = "Add Template",
-        description = "Create and save a new certificate template"
-    )
     @PostMapping
+    @Operation(
+            summary = "Add Template",
+            description = "Create and save a new certificate template"
+    )
     public CertificateTemplate addTemplate(
             @RequestBody CertificateTemplate template) {
         return templateService.addTemplate(template);
     }
 
     // ✅ 2️⃣ LIST ALL TEMPLATES (NEXT)
-    @Operation(
-        summary = "List All Templates",
-        description = "Fetch all certificate templates"
-    )
     @GetMapping
+    @Operation(
+            summary = "List All Templates",
+            description = "Fetch all certificate templates"
+    )
     public List<CertificateTemplate> getAllTemplates() {
         return templateService.getAllTemplates();
     }

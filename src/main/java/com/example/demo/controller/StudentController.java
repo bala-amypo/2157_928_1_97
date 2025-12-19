@@ -18,21 +18,21 @@ public class StudentController {
     private final StudentService studentService;
 
     // ✅ 1️⃣ ADD STUDENT (FIRST)
-    @Operation(
-        summary = "Add Student",
-        description = "Create and save a new student"
-    )
     @PostMapping
+    @Operation(
+            summary = "Add Student",
+            description = "Create and save a new student"
+    )
     public Student addStudent(@RequestBody Student student) {
         return studentService.addStudent(student);
     }
 
     // ✅ 2️⃣ LIST ALL STUDENTS (NEXT)
-    @Operation(
-        summary = "List All Students",
-        description = "Fetch all students"
-    )
     @GetMapping
+    @Operation(
+            summary = "List All Students",
+            description = "Fetch all students"
+    )
     public List<Student> getAllStudents() {
         return studentService.getAllStudents();
     }
