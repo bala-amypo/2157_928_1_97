@@ -1,35 +1,29 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "verification_logs")
-public class VerificationLog {
+@Table(name = "users")
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Certificate certificate;
+    @Column(unique = true)
+    private String email;
 
-    private LocalDateTime verifiedAt;
+    private String password;
+    private String role;
 
-    private String status; // SUCCESS / FAILED
-
-    private String ipAddress;
-
-    public VerificationLog() {
+    public User() {
     }
 
-    public VerificationLog(Long id, Certificate certificate, LocalDateTime verifiedAt,
-                           String status, String ipAddress) {
+    public User(Long id, String email, String password, String role) {
         this.id = id;
-        this.certificate = certificate;
-        this.verifiedAt = verifiedAt;
-        this.status = status;
-        this.ipAddress = ipAddress;
+        this.email = email;
+        this.password = password;
+        this.role = role;
     }
 
     public Long getId() {
@@ -40,35 +34,27 @@ public class VerificationLog {
         this.id = id;
     }
 
-    public Certificate getCertificate() {
-        return certificate;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCertificate(Certificate certificate) {
-        this.certificate = certificate;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public LocalDateTime getVerifiedAt() {
-        return verifiedAt;
+    public String getPassword() {
+        return password;
     }
 
-    public void setVerifiedAt(LocalDateTime verifiedAt) {
-        this.verifiedAt = verifiedAt;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getStatus() {
-        return status;
+    public String getRole() {
+        return role;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

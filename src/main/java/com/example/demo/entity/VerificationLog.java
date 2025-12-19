@@ -15,15 +15,14 @@ public class VerificationLog {
     private Certificate certificate;
 
     private LocalDateTime verifiedAt;
-
-    private String status; // SUCCESS / FAILED
-
+    private String status;
     private String ipAddress;
 
     public VerificationLog() {
     }
 
-    public VerificationLog(Long id, Certificate certificate, LocalDateTime verifiedAt,
+    public VerificationLog(Long id, Certificate certificate,
+                           LocalDateTime verifiedAt,
                            String status, String ipAddress) {
         this.id = id;
         this.certificate = certificate;
