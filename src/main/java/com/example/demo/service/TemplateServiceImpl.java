@@ -1,7 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.CertificateTemplate;
-import com.example.demo.repository.TemplateRepository;
+import com.example.demo.repository.CertificateTemplateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
