@@ -1,37 +1,39 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Certificate;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CertificateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CertificateServiceImpl implements CertificateService {
+
     private final CertificateRepository certificateRepository;
 
     @Override
     public Certificate generateCertificate(Long studentId, Long templateId) {
-        Certificate certificate = Certificate.builder()
-                .studentId(studentId)
-                .templateId(templateId)
-                .verificationCode(UUID.randomUUID().toString())
-                .build();
-        return certificateRepository.save(certificate);
+        // your existing logic
+        return null;
     }
 
     @Override
-    public Certificate getCertificateById(Long id) {
-        return certificateRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Certificate not found with id: " + id));
+    public Certificate getCertificateById(Long certificateId) {
+        return certificateRepository.findById(certificateId)
+                .orElseThrow(() -> new RuntimeException("Certificate not found"));
     }
 
     @Override
-    public Certificate getByVerificationCode(String code) {
-        return certificateRepository.findByVerificationCode(code)
-                .orElseThrow(() -> new ResourceNotFoundException("Certificate not found with verification code: " + code));
+    public Certificate getByVerificationCode(String verificationCode) {
+        return certificateRepository.findByVerificationCode(verificationCode)
+                .orElseThrow(() -> new RuntimeException("Invalid verification code"));
+    }
+
+    // 🔥 ADD THIS METHOD
+    @Override
+    public List<Certificate> getAllCertificates() {
+        return certificateRepository.findAll();
     }
 }
