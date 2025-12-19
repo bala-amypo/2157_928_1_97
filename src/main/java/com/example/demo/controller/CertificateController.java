@@ -10,48 +10,45 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/certificates")
 @RequiredArgsConstructor
-@Tag(name = "CertificateController", description = "Certificate generation & retrieval APIs")
+@Tag(name = "CertificateController", description = "Certificate APIs")
 public class CertificateController {
 
     private final CertificateService certificateService;
 
-    // ✅ 1️⃣ CREATE CERTIFICATE
-    // POST /certificates/generate/{studentId}/{templateId}
+    // ✅ POST /certificates/generate/{studentId}/{templateId}
     @Operation(
             summary = "Generate Certificate",
-            description = "Create certificate using studentId and templateId"
+            description = "Create certificate for student using template"
     )
     @PostMapping("/generate/{studentId}/{templateId}")
     public Certificate generateCertificate(
             @PathVariable Long studentId,
-            @PathVariable Long templateId
-    ) {
+            @PathVariable Long templateId) {
+
         return certificateService.generateCertificate(studentId, templateId);
     }
 
-    // ✅ 2️⃣ GET CERTIFICATE DETAILS
-    // GET /certificates/{certificateId}
+    // ✅ GET /certificates/{certificateId}
     @Operation(
-            summary = "Get Certificate Details",
-            description = "Fetch certificate by certificateId"
+            summary = "Get Certificate",
+            description = "Get certificate details by ID"
     )
     @GetMapping("/{certificateId}")
     public Certificate getCertificateById(
-            @PathVariable Long certificateId
-    ) {
+            @PathVariable Long certificateId) {
+
         return certificateService.getCertificateById(certificateId);
     }
 
-    // ✅ 3️⃣ VERIFY CERTIFICATE BY CODE
-    // GET /certificates/verify/code/{verificationCode}
+    // ✅ GET /certificates/verify/code/{verificationCode}
     @Operation(
             summary = "Verify Certificate",
-            description = "Fetch certificate using verification code"
+            description = "Verify certificate using verification code"
     )
     @GetMapping("/verify/code/{verificationCode}")
-    public Certificate verifyByCode(
-            @PathVariable String verificationCode
-    ) {
+    public Certificate getByVerificationCode(
+            @PathVariable String verificationCode) {
+
         return certificateService.getByVerificationCode(verificationCode);
     }
 }
