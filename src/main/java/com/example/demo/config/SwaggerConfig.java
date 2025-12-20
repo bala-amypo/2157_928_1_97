@@ -18,7 +18,7 @@ public class SwaggerConfig {
                         new Server().url("https://9497.pro604cr.amypo.ai") // my project server URL
                 ))
                 .info(new Info()
-                        .title("Digital Certificate Generator API")  
+                        .title("Digital Certificate Generator API")  // generate for my API certificate
                         .version("1.0")                             // version of my API
                         .description("API documentation for Digital Certificate Generator project") // description
                 );
