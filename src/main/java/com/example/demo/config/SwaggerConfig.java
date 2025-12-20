@@ -15,11 +15,11 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .servers(List.of(
-                        new Server().url("https://9497.pro604cr.amypo.ai") // your project server URL
+                        new Server().url("https://9497.pro604cr.amypo.ai") // my project server URL
                 ))
                 .info(new Info()
-                        .title("Digital Certificate Generator API")  // <-- change the title
-                        .version("1.0")                             // version of your API
+                        .title("Digital Certificate Generator API")  
+                        .version("1.0")                             // version of my API
                         .description("API documentation for Digital Certificate Generator project") // description
                 );
     }
