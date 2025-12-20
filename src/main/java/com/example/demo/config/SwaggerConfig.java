@@ -18,8 +18,8 @@ public class SwaggerConfig {
                         new Server().url("https://9497.pro604cr.amypo.ai")
                 ))
                 .info(new Info()
-                        .title("Demo API")
+                        .title("Digital Certificate Generator API"")
                         .version("1.0")
-                        .description("API documentation for Demo project"));
+                        .description("API documentation for Digital Certificate Generator project"));
     }
 }
