@@ -16,7 +16,7 @@ public class VerificationController {
         this.verificationService = verificationService;
     }
 
-    // POST /verify/{verificationCode}
+    
     @PostMapping("/{verificationCode}")
     public VerificationLog verifyCertificate(
             @PathVariable String verificationCode,
@@ -25,7 +25,7 @@ public class VerificationController {
         return verificationService.verifyCertificate(verificationCode, ipAddress);
     }
 
-    // GET /verify/logs/{certificateId}
+    
     @GetMapping("/logs/{certificateId}")
     public List<VerificationLog> getLogs(@PathVariable Long certificateId) {
         return verificationService.getLogsByCertificate(certificateId);
