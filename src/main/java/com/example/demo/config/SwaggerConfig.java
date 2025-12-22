@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .servers(List.of(
-                        new Server().url("https://9557.pro604cr.amypo.ai/") // my project server URL
+                        new Server().url("https://9247.pro604cr.amypo.ai/") // my project server URL
                 ))
                 .info(new Info()
                         .title("Digital Certificate Generator API")  // generate for my API certificate
