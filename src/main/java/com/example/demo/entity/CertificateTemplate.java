@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "certificate_templates")
@@ -10,11 +11,17 @@ public class CertificateTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Template name is required")
     @Column(unique = true)
     private String templateName;
 
+    @NotBlank(message = "Background URL is required")
     private String backgroundUrl;
+
+    @NotBlank(message = "Font style is required")
     private String fontStyle;
+
+    @NotBlank(message = "Signature name is required")
     private String signatureName;
 
     public CertificateTemplate() {

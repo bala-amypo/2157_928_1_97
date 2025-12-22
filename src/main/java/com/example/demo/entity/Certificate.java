@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Entity
@@ -11,16 +13,21 @@ public class Certificate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Student must not be null")
     @ManyToOne
     private Student student;
 
+    @NotNull(message = "Certificate template must not be null")
     @ManyToOne
     private CertificateTemplate template;
 
+    @NotNull(message = "Issued date is required")
     private LocalDate issuedDate;
 
+    @NotBlank(message = "QR Code URL is required")
     private String qrCodeUrl;
 
+    @NotBlank(message = "Verification code is required")
     @Column(unique = true)
     private String verificationCode;
 

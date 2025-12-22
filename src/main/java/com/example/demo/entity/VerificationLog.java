@@ -1,6 +1,9 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,11 +14,17 @@ public class VerificationLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Certificate must not be null")
     @ManyToOne
     private Certificate certificate;
 
+    @NotNull(message = "Verification time is required")
     private LocalDateTime verifiedAt;
+
+    @NotBlank(message = "Verification status is required")
     private String status;
+
+    @NotBlank(message = "IP address is required")
     private String ipAddress;
 
     public VerificationLog() {
@@ -71,4 +80,3 @@ public class VerificationLog {
         this.ipAddress = ipAddress;
     }
 }
-//in our project in jarkarta was use to do the @id and more @ oprations on the project
