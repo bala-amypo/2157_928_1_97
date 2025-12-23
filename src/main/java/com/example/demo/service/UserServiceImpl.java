@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional   // Applies transaction to all methods in this class
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -16,14 +15,31 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * WRITE transaction
+     * If any RuntimeException occurs, data will be rolled back
+     */
     @Override
+    @Transactional
     public User register(User user) {
-        // If any runtime exception occurs, the transaction will roll back
-        return userRepository.save(user);
+
+        // Step 1: Save user
+        userRepository.save(user);
+
+        // Step 2: Condition to test transaction rollback
+        if (user.getEmail() != null && user.getEmail().endsWith("@test.com")) {
+            throw new ResourceNotFoundException("Transaction rollback test");
+        }
+
+        // Step 3: Commit happens only if no exception
+        return user;
     }
 
+    /**
+     * READ-only transaction
+     */
     @Override
-    @Transactional(readOnly = true) // Read-only transaction for better performance
+    @Transactional(readOnly = true)
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
