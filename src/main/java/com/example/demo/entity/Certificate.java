@@ -1,94 +1,46 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "certificates")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Certificate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Student must not be null")
+    // Relation: Many certificates belong to one student
     @ManyToOne
+    @NotNull(message = "Student must not be null")
     private Student student;
 
-    @NotNull(message = "Certificate template must not be null")
+    // Relation: Many certificates belong to one template
     @ManyToOne
+    @NotNull(message = "Certificate template must not be null")
     private CertificateTemplate template;
 
+    // Issue date of the certificate
     @NotNull(message = "Issued date is required")
     private LocalDate issuedDate;
 
+    // QR code in Base64 format (data:image/png;base64,...)
     @NotBlank(message = "QR Code URL is required")
     private String qrCodeUrl;
 
+    // Unique verification code starting with "VC-"
     @NotBlank(message = "Verification code is required")
     @Column(unique = true)
     private String verificationCode;
-
-    public Certificate() {
-    }
-
-    public Certificate(Long id, Student student, CertificateTemplate template,
-                       LocalDate issuedDate, String qrCodeUrl, String verificationCode) {
-        this.id = id;
-        this.student = student;
-        this.template = template;
-        this.issuedDate = issuedDate;
-        this.qrCodeUrl = qrCodeUrl;
-        this.verificationCode = verificationCode;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
-
-    public CertificateTemplate getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(CertificateTemplate template) {
-        this.template = template;
-    }
-
-    public LocalDate getIssuedDate() {
-        return issuedDate;
-    }
-
-    public void setIssuedDate(LocalDate issuedDate) {
-        this.issuedDate = issuedDate;
-    }
-
-    public String getQrCodeUrl() {
-        return qrCodeUrl;
-    }
-
-    public void setQrCodeUrl(String qrCodeUrl) {
-        this.qrCodeUrl = qrCodeUrl;
-    }
-
-    public String getVerificationCode() {
-        return verificationCode;
-    }
-
-    public void setVerificationCode(String verificationCode) {
-        this.verificationCode = verificationCode;
-    }
 }

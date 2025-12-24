@@ -2,9 +2,17 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 @Entity
 @Table(name = "certificate_templates")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CertificateTemplate {
 
     @Id
@@ -23,56 +31,4 @@ public class CertificateTemplate {
 
     @NotBlank(message = "Signature name is required")
     private String signatureName;
-
-    public CertificateTemplate() {
-    }
-
-    public CertificateTemplate(Long id, String templateName, String backgroundUrl,
-                               String fontStyle, String signatureName) {
-        this.id = id;
-        this.templateName = templateName;
-        this.backgroundUrl = backgroundUrl;
-        this.fontStyle = fontStyle;
-        this.signatureName = signatureName;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTemplateName() {
-        return templateName;
-    }
-
-    public void setTemplateName(String templateName) {
-        this.templateName = templateName;
-    }
-
-    public String getBackgroundUrl() {
-        return backgroundUrl;
-    }
-
-    public void setBackgroundUrl(String backgroundUrl) {
-        this.backgroundUrl = backgroundUrl;
-    }
-
-    public String getFontStyle() {
-        return fontStyle;
-    }
-
-    public void setFontStyle(String fontStyle) {
-        this.fontStyle = fontStyle;
-    }
-
-    public String getSignatureName() {
-        return signatureName;
-    }
-
-    public void setSignatureName(String signatureName) {
-        this.signatureName = signatureName;
-    }
 }
