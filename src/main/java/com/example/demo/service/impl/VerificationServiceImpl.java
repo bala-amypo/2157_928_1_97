@@ -48,11 +48,7 @@ public class VerificationServiceImpl implements VerificationService {
     /**
      * READ-only transaction
      */
-    @Override
-    @Transactional(readOnly = true)
-    public List<VerificationLog> getLogsByCertificate(Long certificateId) {
-        return logRepository.findByCertificateId(certificateId);
-    }
+    
     @Override
 public List<VerificationLog> getLogsByCertificate(Long certificateId) {
     return logRepository.findByCertificateId(certificateId);

@@ -83,4 +83,13 @@ public class CertificateServiceImpl implements CertificateService {
     public List<Certificate> getAllCertificates() {
         return certificateRepository.findAll();
     }
+
+    @Override
+public List<Certificate> findByStudentId(Long studentId) {
+    Student student = studentRepository.findById(studentId)
+            .orElseThrow(() -> new RuntimeException("Student not found"));
+
+    return certificateRepository.findByStudent(student);
+}
+
 }
