@@ -1,14 +1,14 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AuthRequest;
+import com.example.demo.dto.AuthResponse;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
-import com.example.demo.service.UserService;
 import com.example.demo.security.JwtUtil;
+import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,42 +24,34 @@ public class AuthController {
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
-    // Register new user
+    // ================= REGISTER =================
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        // Encrypt password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if (user.getRole() == null) {
-            user.setRole("STAFF");
-        }
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
 
-        User savedUser = userService.register(user);
-        Map<String, Object> response = new HashMap<>();
-        response.put("id", savedUser.getId());
-        response.put("email", savedUser.getEmail());
-        response.put("role", savedUser.getRole());
-        return ResponseEntity.ok(response);
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole("USER");
+
+        userService.register(user);
+
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 
-    // Login
+    // ================= LOGIN =================
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody User loginRequest) {
-        User user = userService.findByEmail(loginRequest.getEmail());
+    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest request) {
 
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body("Invalid credentials");
+        User user = userService.findByEmail(request.getEmail());
+
+        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            return ResponseEntity.status(401).build();
         }
 
-        // Generate JWT
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("role", user.getRole());
-        String token = jwtUtil.generateToken(user.getEmail(), claims);
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("token", token);
-        response.put("email", user.getEmail());
-        response.put("role", user.getRole());
-
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
