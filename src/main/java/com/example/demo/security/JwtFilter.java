@@ -34,9 +34,13 @@ public class JwtFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
+
             String token = authHeader.substring(7);
 
+            // ✅ validateToken(token)
             if (jwtUtil.validateToken(token)) {
+
+                // ✅ parseToken(token)
                 Claims claims = jwtUtil.parseToken(token);
 
                 String email = claims.getSubject();
@@ -46,7 +50,9 @@ public class JwtFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(
                                 email,
                                 null,
-                                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
+                                Collections.singletonList(
+                                        new SimpleGrantedAuthority("ROLE_" + role)
+                                )
                         );
 
                 authentication.setDetails(
