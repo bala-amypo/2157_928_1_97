@@ -5,11 +5,10 @@ import lombok.*;
 
 @Entity
 @Table(name = "users")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class User {
 
     @Id
@@ -23,5 +22,6 @@ public class User {
 
     private String password;
 
+    // Default value "STAFF" is handled in the Service layer logic
     private String role;
 }

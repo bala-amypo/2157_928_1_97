@@ -2,16 +2,14 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "verification_logs")
-@Getter
-@Setter
+@Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class VerificationLog {
 
     @Id
@@ -24,7 +22,7 @@ public class VerificationLog {
 
     private LocalDateTime verifiedAt;
 
-    private String status;
+    private String status; // SUCCESS or FAILED
 
     private String ipAddress;
 }
