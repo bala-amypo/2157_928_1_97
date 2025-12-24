@@ -1,58 +1,43 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Date;
-import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private final String secret = "mySecretKey"; // Replace with a secure secret in production
-    private final long expirationMs = 24 * 60 * 60 * 1000; // 24 hours
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256); // secret key
 
-    /**
-     * Generate JWT token
-     * @param claims Map of custom claims (like userId, role)
-     * @param subject The subject (typically user's email)
-     * @return JWT token string
-     */
-    public String generateToken(Map<String, Object> claims, String subject) {
+    private final long expiration = 1000 * 60 * 60 * 10; // 10 hours
+
+    public String generateToken(String email, String role) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
+                .setSubject(email)
+                .claim("role", role)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(key)
                 .compact();
     }
 
-    /**
-     * Validate token
-     * @param token JWT string
-     * @return true if valid, false if expired or invalid
-     */
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    /**
-     * Parse token and get claims
-     * @param token JWT string
-     * @return Claims object
-     */
     public Claims parseToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            parseToken(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 }
