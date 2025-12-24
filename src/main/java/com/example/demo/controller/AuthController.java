@@ -16,12 +16,11 @@ public class AuthController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public AuthController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     // ================= REGISTER =================
@@ -46,8 +45,8 @@ public class AuthController {
 
         User user = userService.findByEmail(request.getEmail());
 
-        if (user == null || !passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).build();
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
         }
 
         String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
