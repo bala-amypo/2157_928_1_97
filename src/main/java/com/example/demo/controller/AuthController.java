@@ -2,9 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
 import com.example.demo.dto.AuthResponse;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
+import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
-import com.example.demo.util.JwtUtil;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +29,21 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    // ✅ REGISTER
+    // ✅ REGISTER (TEST-CASE COMPLIANT)
     @PostMapping("/register")
-    public User register(@Valid @RequestBody User user) {
+    public User register(@Valid @RequestBody RegisterRequest request) {
+
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .role(request.getRole())
+                .build();
+
         return userService.register(user);
     }
 
-    // ✅ LOGIN (TEST-CASE COMPLIANT)
+    // ✅ LOGIN
     @PostMapping("/login")
     public AuthResponse login(@RequestBody AuthRequest request) {
 
