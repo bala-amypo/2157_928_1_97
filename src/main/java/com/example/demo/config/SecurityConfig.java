@@ -40,5 +40,6 @@ public class SecurityConfig {
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // add JWT filter
 
         return http.build();
+        
     }
 }
