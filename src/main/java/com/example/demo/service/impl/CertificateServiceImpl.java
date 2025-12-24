@@ -48,8 +48,8 @@ public class CertificateServiceImpl implements CertificateService {
         certificate.setStudent(student);
         certificate.setTemplate(template);
         certificate.setIssuedDate(LocalDate.now());
-        certificate.setVerificationCode(UUID.randomUUID().toString());
-        certificate.setQrCodeUrl("QR-" + UUID.randomUUID());
+        certificate.setVerificationCode("VC-" + UUID.randomUUID());
+        certificate.setQrCodeUrl("data:image/png;base64," + UUID.randomUUID());
 
         // Save certificate
         return certificateRepository.save(certificate);
