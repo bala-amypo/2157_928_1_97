@@ -1,15 +1,14 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "certificate_templates")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -19,16 +18,15 @@ public class CertificateTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Template name is required")
     @Column(unique = true)
     private String templateName;
 
-    @NotBlank(message = "Background URL is required")
     private String backgroundUrl;
 
-    @NotBlank(message = "Font style is required")
     private String fontStyle;
 
-    @NotBlank(message = "Signature name is required")
     private String signatureName;
+
+    @OneToMany(mappedBy = "template", cascade = CascadeType.ALL)
+    private List<Certificate> certificates;
 }
