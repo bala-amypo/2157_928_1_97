@@ -1,14 +1,13 @@
-package com.example.demo.service;
+package com.example.demo.service.impl;
 
 import com.example.demo.entity.Certificate;
 import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.entity.Student;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CertificateRepository;
 import com.example.demo.repository.CertificateTemplateRepository;
 import com.example.demo.repository.StudentRepository;
+import com.example.demo.service.CertificateService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,67 +28,41 @@ public class CertificateServiceImpl implements CertificateService {
         this.templateRepository = templateRepository;
     }
 
-    /**
-     * WRITE transaction: Rollback on exception
-     */
     @Override
-    @Transactional
     public Certificate generateCertificate(Long studentId, Long templateId) {
-        // Fetch student
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found"));
+                .orElseThrow(() -> new RuntimeException("Student not found"));
 
-        // Fetch template
         CertificateTemplate template = templateRepository.findById(templateId)
-                .orElseThrow(() -> new ResourceNotFoundException("Certificate template not found"));
+                .orElseThrow(() -> new RuntimeException("Template not found"));
 
-        // Create certificate
-        Certificate certificate = new Certificate();
-        certificate.setStudent(student);
-        certificate.setTemplate(template);
-        certificate.setIssuedDate(LocalDate.now());
-        certificate.setVerificationCode("VC-" + UUID.randomUUID());
-        certificate.setQrCodeUrl("data:image/png;base64," + UUID.randomUUID());
+        Certificate certificate = Certificate.builder()
+                .student(student)
+                .template(template)
+                .issuedDate(LocalDate.now())
+                .verificationCode("VC-" + UUID.randomUUID())
+                .qrCodeUrl("data:image/png;base64," + UUID.randomUUID())
+                .build();
 
-        // Save certificate
         return certificateRepository.save(certificate);
     }
 
-    /**
-     * READ-only transaction: Get by ID
-     */
     @Override
-    @Transactional(readOnly = true)
-    public Certificate getCertificateById(Long certificateId) {
+    public Certificate getCertificate(Long certificateId) {
         return certificateRepository.findById(certificateId)
-                .orElseThrow(() -> new ResourceNotFoundException("Certificate not found"));
-    }
-
-    /**
-     * READ-only transaction: Get by verification code
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Certificate getByVerificationCode(String verificationCode) {
-        return certificateRepository.findByVerificationCode(verificationCode)
-                .orElseThrow(() -> new ResourceNotFoundException("Certificate not found"));
-    }
-
-    /**
-     * READ-only transaction: Get all certificates
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Certificate> getAllCertificates() {
-        return certificateRepository.findAll();
+                .orElseThrow(() -> new RuntimeException("Certificate not found"));
     }
 
     @Override
-public List<Certificate> findByStudentId(Long studentId) {
-    Student student = studentRepository.findById(studentId)
-            .orElseThrow(() -> new RuntimeException("Student not found"));
+    public Certificate findByVerificationCode(String code) {
+        return certificateRepository.findByVerificationCode(code)
+                .orElseThrow(() -> new RuntimeException("Certificate not found"));
+    }
 
-    return certificateRepository.findByStudent(student);
-}
-
+    @Override
+    public List<Certificate> findByStudentId(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        return certificateRepository.findByStudent(student);
+    }
 }
