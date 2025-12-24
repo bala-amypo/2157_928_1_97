@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.service.TemplateService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/templates")
 public class TemplateController {
-
     private final TemplateService templateService;
 
     public TemplateController(TemplateService templateService) {
@@ -17,12 +17,12 @@ public class TemplateController {
     }
 
     @PostMapping
-    public CertificateTemplate addTemplate(@RequestBody CertificateTemplate template) {
-        return templateService.addTemplate(template);
+    public ResponseEntity<CertificateTemplate> addTemplate(@RequestBody CertificateTemplate template) {
+        return ResponseEntity.ok(templateService.addTemplate(template));
     }
 
     @GetMapping
-    public List<CertificateTemplate> getAllTemplates() {
-        return templateService.getAllTemplates();
+    public ResponseEntity<List<CertificateTemplate>> getAllTemplates() {
+        return ResponseEntity.ok(templateService.getAllTemplates());
     }
 }
