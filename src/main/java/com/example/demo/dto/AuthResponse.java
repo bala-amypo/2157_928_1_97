@@ -1,23 +1,16 @@
 package com.example.demo.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class AuthResponse {
 
     private String token;
-
-    // No-args constructor (Spring-ku thevai)
-    public AuthResponse() {
-    }
-
-    // ONLY token constructor (unga error-ku fix)
-    public AuthResponse(String token) {
-        this.token = token;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
+    private Long userId;
+    private String email;
+    private String role;
 }
