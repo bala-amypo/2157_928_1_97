@@ -1,7 +1,6 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.CertificateTemplate;
-import com.example.demo.exception.DuplicateResourceException;
 import com.example.demo.repository.CertificateTemplateRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +26,7 @@ public class TemplateServiceImpl implements TemplateService {
 
         templateRepository.findByTemplateName(template.getTemplateName())
                 .ifPresent(t -> {
-                    throw new DuplicateResourceException("Template name already exists");
+                    throw new RuntimeException("Template name exists");
                 });
 
         return templateRepository.save(template);
@@ -41,5 +40,4 @@ public class TemplateServiceImpl implements TemplateService {
     public List<CertificateTemplate> getAllTemplates() {
         return templateRepository.findAll();
     }
-
 }
