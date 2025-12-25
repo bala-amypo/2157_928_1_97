@@ -1,9 +1,8 @@
 package com.example.demo.config;
 
-import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,16 +12,11 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info()
-                        .title("Digital Certificate Generator API")
-                        .version("1.0")
-                        .description("API documentation for Digital Certificate Generator"))
-                .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
-                                new SecurityScheme()
-                                        .name("Authorization")
-                                        .type(SecurityScheme.Type.HTTP)
-                                        .scheme("bearer")
-                                        .bearerFormat("JWT")));
+                .info(new Info().title("Digital certificate generator")
+                                .version("1.0")
+                                .description("Digital certificate genarator APIs"))
+                .addServersItem(new Server()
+                        .url("https://9171.408procr.amypo.ai/")
+                        .description("Custom Server URL"));
     }
 }
