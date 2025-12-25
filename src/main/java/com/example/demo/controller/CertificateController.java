@@ -2,28 +2,30 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.Certificate;
 import com.example.demo.service.CertificateService;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/certificates")
-@Tag(name = "Certificates")
+@RequiredArgsConstructor
 public class CertificateController {
 
-    private final CertificateService service;
-
-    public CertificateController(CertificateService service) {
-        this.service = service;
-    }
+    private final CertificateService certificateService;
 
     @PostMapping("/generate/{studentId}/{templateId}")
-    public Certificate generate(@PathVariable Long studentId,
-                                @PathVariable Long templateId) {
-        return service.generateCertificate(studentId, templateId);
+    public Certificate generateCertificate(@PathVariable Long studentId, @PathVariable Long templateId){
+        return certificateService.generateCertificate(studentId, templateId);
     }
 
-    @GetMapping("/{id}")
-    public Certificate get(@PathVariable Long id) {
-        return service.getCertificate(id);
+    @GetMapping("/{certificateId}")
+    public Certificate getCertificate(@PathVariable Long certificateId){
+        return certificateService.getCertificate(certificateId);
+    }
+
+    @GetMapping("/verify/code/{verificationCode}")
+    public Certificate getByVerificationCode(@PathVariable String verificationCode){
+        return certificateService.findByVerificationCode(verificationCode);
     }
 }
