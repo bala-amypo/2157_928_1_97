@@ -7,16 +7,12 @@ import java.util.*;
 
 @Component
 public class JwtUtil {
-    private final String secret;
-    private final Long expirationMs;
+    private String secret = "abcdefghijklmnopqrstuvwxyz0123456789ABCD";
+    private Long expirationMs = 3600000L;
 
-    // Required by Spring for normal execution
-    public JwtUtil() {
-        this.secret = "abcdefghijklmnopqrstuvwxyz0123456789ABCD";
-        this.expirationMs = 3600000L;
-    }
+    public JwtUtil() {}
 
-    // Required by Technical Constraint #4 for Automated Tests
+    // CRITICAL: Required for automated test suite (Tests 49-56)
     public JwtUtil(String secret, Long expirationMs) {
         this.secret = secret;
         this.expirationMs = expirationMs;
@@ -24,15 +20,21 @@ public class JwtUtil {
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .setClaims(claims).setSubject(subject)
-                .setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }
 
     public boolean validateToken(String token) {
-        try { Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(token); return true; }
-        catch (Exception e) { return false; }
+        try {
+            Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     public Jws<Claims> parseToken(String token) {
