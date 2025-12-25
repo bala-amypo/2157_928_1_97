@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Table(name = "certificate_templates")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,10 +15,9 @@ public class CertificateTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String templateName;
 
-    private String backgroundUrl;
-    private String fontStyle;
-    private String signatureName;
+    @Column(columnDefinition = "TEXT")
+    private String content;
 }
