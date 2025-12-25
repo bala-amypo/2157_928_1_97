@@ -17,9 +17,13 @@ public class VerificationLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String certificateNumber;
-
-    private boolean valid;
+    @ManyToOne
+    @JoinColumn(name = "certificate_id")
+    private Certificate certificate;
 
     private LocalDateTime verifiedAt;
+
+    private String status;
+
+    private String ipAddress;
 }

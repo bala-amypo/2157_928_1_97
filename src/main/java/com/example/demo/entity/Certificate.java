@@ -3,7 +3,8 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "certificates")
@@ -17,8 +18,6 @@ public class Certificate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String certificateNumber;
-
     @ManyToOne
     @JoinColumn(name = "student_id")
     private Student student;
@@ -27,7 +26,14 @@ public class Certificate {
     @JoinColumn(name = "template_id")
     private CertificateTemplate template;
 
-    private LocalDateTime issuedAt;
+    private LocalDate issuedDate;
 
-    private String qrCodePath;
+    @Column(unique = true)
+    private String verificationCode;
+
+    @Column(columnDefinition = "TEXT")
+    private String qrCodeUrl;
+
+    @OneToMany(mappedBy = "certificate", cascade = CascadeType.ALL)
+    private List<VerificationLog> logs;
 }

@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "certificate_templates")
 @Data
@@ -15,9 +17,15 @@ public class CertificateTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String templateName;
 
-    @Column(columnDefinition = "TEXT")
-    private String content;
+    private String backgroundUrl;
+
+    private String fontStyle;
+
+    private String signatureName;
+
+    @OneToMany(mappedBy = "template")
+    private List<Certificate> certificates;
 }
