@@ -1,28 +1,26 @@
 package com.example.demo.controller;
 
-import com.example.demo.entity.VerificationLog;
+import com.example.demo.entity.Certificate;
 import com.example.demo.service.VerificationService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
-
 @RestController
-@RequestMapping("/verify")
-@RequiredArgsConstructor
+@RequestMapping("/api/verify")
 public class VerificationController {
-
     private final VerificationService verificationService;
 
-    @PostMapping("/{verificationCode}")
-    public VerificationLog verify(@PathVariable String verificationCode, HttpServletRequest request){
-        String clientIp = request.getRemoteAddr();
-        return verificationService.verifyCertificate(verificationCode,clientIp);
+    public VerificationController(VerificationService verificationService) {
+        this.verificationService = verificationService;
     }
 
-    @GetMapping("/logs/{certificateId}")
-    public List<VerificationLog> getLogs(@PathVariable Long certificateId){
-        return verificationService.getLogsByCertificate(certificateId);
+    @GetMapping("/{verificationCode}")
+    public ResponseEntity<?> verify(@PathVariable String verificationCode) {
+        try {
+            Certificate certificate = verificationService.verifyCertificate(verificationCode);
+            return ResponseEntity.ok(certificate);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
