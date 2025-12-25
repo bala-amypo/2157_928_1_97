@@ -9,7 +9,7 @@ import com.example.demo.security.JwtUtil;
 import com.example.demo.service.*;
 import com.example.demo.service.impl.*;
 
-import lombok.var;
+// import lombok.var;  <-- THIS LINE MUST REMAIN DELETED
 
 import org.mockito.*;
 import org.testng.Assert;
@@ -24,8 +24,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 /**
- * Corrected TestNG test class (64 tests). Uses type-safe invocation.getArgument(0, Type.class)
- * and type-specific any(...) matchers to avoid ClassCastException / NPE.
+ * Corrected TestNG test class (64 tests). 
+ * Native Java 17 'var' is used automatically without the restricted Lombok import.
  */
 @Listeners(TestResultListener.class)
 public class DigitalCertificateSystemTest {
@@ -123,9 +123,6 @@ public class DigitalCertificateSystemTest {
         Assert.assertNotNull(certificateController.getClass().getMethod("get", Long.class));
     }
 
-    // ------------------------------------------
-    // Section 2: CRUD & REST APIs (9-16)
-    // ------------------------------------------
     @Test(priority = 9, groups = {"crud"})
     public void t09_addStudentSuccess() {
         Student s = Student.builder().name("Alice").email("alice@ex.com").rollNumber("R001").build();
@@ -225,9 +222,6 @@ public class DigitalCertificateSystemTest {
         Assert.assertEquals(out.getId().longValue(), 200L);
     }
 
-    // ------------------------------------------
-    // Section 3: DI & IoC (17-24)
-    // ------------------------------------------
     @Test(priority = 17, groups = {"di"})
     public void t17_serviceBeansAreInstances() {
         Assert.assertTrue(userService instanceof UserService);
@@ -299,9 +293,6 @@ public class DigitalCertificateSystemTest {
         Assert.assertTrue(true);
     }
 
-    // ---------------------------------------------------
-    // Section 4: Hibernate configs, annotations & CRUD (25-32)
-    // ---------------------------------------------------
     @Test(priority = 25, groups = {"hibernate"})
     public void t25_entitiesHaveEntityAnnotation() {
         Assert.assertTrue(com.example.demo.entity.Student.class.isAnnotationPresent(jakarta.persistence.Entity.class));
@@ -389,9 +380,6 @@ public class DigitalCertificateSystemTest {
         Assert.assertEquals(list.size(), 1);
     }
 
-    // ---------------------------------------------------
-    // Section 5: JPA mapping & normalization (33-40)
-    // ---------------------------------------------------
     @Test(priority = 33, groups = {"jpa"})
     public void t33_1NF_fieldAtomicity() {
         Student s = new Student(); s.setName("Name"); s.setEmail("e@ex"); s.setRollNumber("R33");
@@ -447,9 +435,6 @@ public class DigitalCertificateSystemTest {
         Assert.assertEquals(saved.getRollNumber(), "RXX");
     }
 
-    // ---------------------------------------------------
-    // Section 6: Many-to-Many relationships & associations (41-48) (simulated)
-    // ---------------------------------------------------
     @Test(priority = 41, groups = {"m2m"})
     public void t41_simulateManyToManyMappingPresence() {
         Student s1 = Student.builder().id(50L).name("M1").email("m1@ex").rollNumber("RM1").build();
@@ -528,9 +513,6 @@ public class DigitalCertificateSystemTest {
         Assert.assertNotNull(c.getVerificationCode());
     }
 
-    // ---------------------------------------------------
-    // Section 7: Security & JWT (49-56)
-    // ---------------------------------------------------
     @Test(priority = 49, groups = {"security"})
     public void t49_registerThenLoginProducesToken() {
         RegisterRequest req = new RegisterRequest();
@@ -613,9 +595,6 @@ public class DigitalCertificateSystemTest {
         Assert.assertTrue(enc.matches("mypwd", hashed));
     }
 
-    // ---------------------------------------------------
-    // Section 8: HQL / HCQL advanced querying (57-64)
-    // ---------------------------------------------------
     @Test(priority = 57, groups = {"hql"})
     public void t57_findCertificateByVerificationCodeRepo() {
         Certificate c = Certificate.builder().id(321L).verificationCode("HVC1").build();
@@ -686,3 +665,4 @@ public class DigitalCertificateSystemTest {
         Assert.assertNotNull(certificateService);
     }
 }
+ 
