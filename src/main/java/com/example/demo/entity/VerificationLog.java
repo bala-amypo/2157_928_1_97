@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "verification_logs")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,10 +17,9 @@ public class VerificationLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Certificate certificate;
+    private String certificateNumber;
+
+    private boolean valid;
 
     private LocalDateTime verifiedAt;
-    private String status;
-    private String ipAddress;
 }
