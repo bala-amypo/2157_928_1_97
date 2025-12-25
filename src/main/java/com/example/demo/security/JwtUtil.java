@@ -3,41 +3,48 @@ package com.example.demo.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 
 @Component
 public class JwtUtil {
+    private final SecretKey key;
+    private final long expiration;
 
-    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long expirationMs = 24*60*60*1000; // 24 hours
+    public JwtUtil() {
+        this("abcdefghijklmnopqrstuvwxyz0123456789ABCD", 3600000L);
+    }
 
-    public String generateToken(Map<String,Object> claims, String subject){
+    public JwtUtil(String secret, long expiration) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+        this.expiration = expiration;
+    }
+
+    public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis()+expirationMs))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(key)
                 .compact();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            parseToken(token);
             return true;
-        }catch (JwtException | IllegalArgumentException e){
+        } catch (Exception e) {
             return false;
         }
     }
 
-    public Claims extractAllClaims(String token){
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-    }
-
-    public String extractEmail(String token){
-        return extractAllClaims(token).getSubject();
+    public Claims parseToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 }

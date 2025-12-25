@@ -1,65 +1,73 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.Certificate;
-import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.entity.Student;
+import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.repository.CertificateRepository;
-import com.example.demo.repository.CertificateTemplateRepository;
 import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.CertificateTemplateRepository;
 import com.example.demo.service.CertificateService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
+import java.util.Base64;
 
 @Service
-@RequiredArgsConstructor
 public class CertificateServiceImpl implements CertificateService {
-
     private final CertificateRepository certificateRepository;
     private final StudentRepository studentRepository;
     private final CertificateTemplateRepository templateRepository;
 
+    public CertificateServiceImpl(CertificateRepository certificateRepository, 
+                                StudentRepository studentRepository,
+                                CertificateTemplateRepository templateRepository) {
+        this.certificateRepository = certificateRepository;
+        this.studentRepository = studentRepository;
+        this.templateRepository = templateRepository;
+    }
+
     @Override
     public Certificate generateCertificate(Long studentId, Long templateId) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(()-> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new RuntimeException("Student not found"));
         CertificateTemplate template = templateRepository.findById(templateId)
-                .orElseThrow(()-> new RuntimeException("Template not found"));
+                .orElseThrow(() -> new RuntimeException("Template not found"));
 
-        String verificationCode = "VC-" + UUID.randomUUID().toString();
-        String qrCode = "data:image/png;base64," + Base64.getEncoder().encodeToString(verificationCode.getBytes());
+        String verificationCode = "VC-" + UUID.randomUUID().toString().substring(0, 8);
+        String qrCodeUrl = generateQRCode(verificationCode);
 
         Certificate certificate = Certificate.builder()
                 .student(student)
                 .template(template)
-                .issuedDate(LocalDate.now())
                 .verificationCode(verificationCode)
-                .qrCodeUrl(qrCode)
+                .qrCodeUrl(qrCodeUrl)
                 .build();
 
         return certificateRepository.save(certificate);
     }
 
     @Override
-    public Certificate getCertificate(Long certificateId) {
-        return certificateRepository.findById(certificateId)
-                .orElseThrow(()-> new RuntimeException("Certificate not found"));
+    public Certificate getCertificate(Long id) {
+        return certificateRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Certificate not found"));
     }
 
     @Override
-    public Certificate findByVerificationCode(String code) {
-        return certificateRepository.findByVerificationCode(code)
-                .orElseThrow(()-> new RuntimeException("Certificate not found"));
+    public Certificate findByVerificationCode(String verificationCode) {
+        return certificateRepository.findByVerificationCode(verificationCode)
+                .orElseThrow(() -> new RuntimeException("Certificate not found"));
     }
 
     @Override
     public List<Certificate> findByStudentId(Long studentId) {
         Student student = studentRepository.findById(studentId)
-                .orElseThrow(()-> new RuntimeException("Student not found"));
+                .orElseThrow(() -> new RuntimeException("Student not found"));
         return certificateRepository.findByStudent(student);
+    }
+
+    private String generateQRCode(String verificationCode) {
+        // Simple base64 encoded QR code simulation
+        String qrData = "QR:" + verificationCode;
+        return "data:image/png;base64," + Base64.getEncoder().encodeToString(qrData.getBytes());
     }
 }
