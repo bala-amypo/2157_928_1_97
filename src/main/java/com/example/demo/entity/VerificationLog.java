@@ -3,14 +3,22 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
-@Entity @Table(name = "verification_logs")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Entity
+@Table(name = "verification_logs")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class VerificationLog {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne @JoinColumn(name = "certificate_id")
+    
+    @ManyToOne
+    @JoinColumn(name = "certificate_id")
     private Certificate certificate;
+    
     private LocalDateTime verifiedAt;
-    private String status; // SUCCESS or FAILED
+    private String status;
     private String ipAddress;
 }
