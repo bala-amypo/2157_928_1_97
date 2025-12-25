@@ -26,6 +26,6 @@ public class CertificateTemplate {
 
     private String signatureName;
 
-    @OneToMany(mappedBy = "template")
+    @OneToMany(mappedBy = "template", cascade = CascadeType.ALL)
     private List<Certificate> certificates;
 }

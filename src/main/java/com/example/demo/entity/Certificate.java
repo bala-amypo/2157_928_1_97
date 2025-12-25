@@ -31,9 +31,9 @@ public class Certificate {
     @Column(unique = true)
     private String verificationCode;
 
-    @Column(columnDefinition = "TEXT")
+    @Lob
     private String qrCodeUrl;
 
     @OneToMany(mappedBy = "certificate", cascade = CascadeType.ALL)
-    private List<VerificationLog> logs;
+    private List<VerificationLog> verificationLogs;
 }
