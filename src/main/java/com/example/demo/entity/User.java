@@ -6,9 +6,9 @@ import lombok.*;
 @Entity
 @Table(name = "users")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
@@ -17,11 +17,10 @@ public class User {
 
     private String name;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
 
     private String password;
 
-    // Default value "STAFF" is handled in the Service layer logic
     private String role;
 }
