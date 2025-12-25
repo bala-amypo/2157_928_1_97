@@ -5,38 +5,31 @@ import com.example.demo.entity.VerificationLog;
 import com.example.demo.repository.CertificateRepository;
 import com.example.demo.repository.VerificationLogRepository;
 import com.example.demo.service.VerificationService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Service
-@RequiredArgsConstructor
 public class VerificationServiceImpl implements VerificationService {
-
     private final CertificateRepository certificateRepository;
     private final VerificationLogRepository logRepository;
 
-    @Override
-    public VerificationLog verifyCertificate(String verificationCode, String clientIp) {
-        Certificate cert = certificateRepository.findByVerificationCode(verificationCode).orElse(null);
-        String status = (cert != null) ? "SUCCESS" : "FAILED";
-
-        VerificationLog log = VerificationLog.builder()
-                .certificate(cert)
-                .verifiedAt(LocalDateTime.now())
-                .status(status)
-                .ipAddress(clientIp)
-                .build();
-
-        return logRepository.save(log);
+    public VerificationServiceImpl(CertificateRepository certificateRepository,
+                                 VerificationLogRepository logRepository) {
+        this.certificateRepository = certificateRepository;
+        this.logRepository = logRepository;
     }
 
     @Override
-    public List<VerificationLog> getLogsByCertificate(Long certificateId) {
-        certificateRepository.findById(certificateId)
-                .orElseThrow(()-> new RuntimeException("Certificate not found"));
-        return logRepository.findByCertificateId(certificateId);
+    public Certificate verifyCertificate(String verificationCode) {
+        Certificate certificate = certificateRepository.findByVerificationCode(verificationCode)
+                .orElseThrow(() -> new RuntimeException("Certificate not found"));
+
+        VerificationLog log = VerificationLog.builder()
+                .verificationCode(verificationCode)
+                .status("SUCCESS")
+                .ipAddress("127.0.0.1")
+                .build();
+        logRepository.save(log);
+
+        return certificate;
     }
 }
