@@ -1,36 +1,25 @@
 package com.example.demo.controller;
-
 import com.example.demo.entity.Certificate;
 import com.example.demo.service.CertificateService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequestMapping("/api/certificates")
+@RestController @RequestMapping("/certificates")
 public class CertificateController {
     private final CertificateService certificateService;
+    public CertificateController(CertificateService certificateService) { this.certificateService = certificateService; }
 
-    public CertificateController(CertificateService certificateService) {
-        this.certificateService = certificateService;
+    @PostMapping("/generate/{studentId}/{templateId}")
+    public Certificate generate(@PathVariable Long studentId, @PathVariable Long templateId) {
+        return certificateService.generateCertificate(studentId, templateId);
     }
 
-    @PostMapping("/generate")
-    public ResponseEntity<?> generate(@RequestParam Long studentId, @RequestParam Long templateId) {
-        try {
-            Certificate certificate = certificateService.generateCertificate(studentId, templateId);
-            return ResponseEntity.ok(certificate);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping("/{certificateId}")
+    public Certificate get(@PathVariable Long certificateId) {
+        return certificateService.getCertificate(certificateId);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> get(@PathVariable Long id) {
-        try {
-            Certificate certificate = certificateService.getCertificate(id);
-            return ResponseEntity.ok(certificate);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/verify/code/{verificationCode}")
+    public Certificate verify(@PathVariable String verificationCode) {
+        return certificateService.findByVerificationCode(verificationCode);
     }
 }
