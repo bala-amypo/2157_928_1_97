@@ -1,15 +1,18 @@
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
+
+import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 
 @Component
 public class JwtUtil {
 
-    private String secret = "secretkey123456";
-    private long expirationMs = 3600000;
+    private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private final long expirationMs = 24*60*60*1000; // 24 hours
 
     public String generateToken(Map<String,Object> claims, String subject){
         return Jwts.builder()
@@ -17,20 +20,24 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis()+expirationMs))
-                .signWith(SignatureAlgorithm.HS256,secret)
+                .signWith(key)
                 .compact();
     }
 
     public boolean validateToken(String token){
-        try{
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+        try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
-        }catch(Exception e){
+        }catch (JwtException | IllegalArgumentException e){
             return false;
         }
     }
 
-    public Claims parseToken(String token){
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    public Claims extractAllClaims(String token){
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
+    public String extractEmail(String token){
+        return extractAllClaims(token).getSubject();
     }
 }
