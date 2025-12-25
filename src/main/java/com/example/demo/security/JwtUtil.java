@@ -3,48 +3,39 @@ package com.example.demo.security;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
-import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class JwtUtil {
-    private final SecretKey key;
-    private final long expiration;
+    private final String secret;
+    private final Long expirationMs;
 
+    // Required by Spring for normal execution
     public JwtUtil() {
-        this("abcdefghijklmnopqrstuvwxyz0123456789ABCD", 3600000L);
+        this.secret = "abcdefghijklmnopqrstuvwxyz0123456789ABCD";
+        this.expirationMs = 3600000L;
     }
 
-    public JwtUtil(String secret, long expiration) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expiration = expiration;
+    // Required by Technical Constraint #4 for Automated Tests
+    public JwtUtil(String secret, Long expirationMs) {
+        this.secret = secret;
+        this.expirationMs = expirationMs;
     }
 
     public String generateToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(key)
+                .setClaims(claims).setSubject(subject)
+                .setIssuedAt(new Date()).setExpiration(new Date(System.currentTimeMillis() + expirationMs))
+                .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }
 
     public boolean validateToken(String token) {
-        try {
-            parseToken(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+        try { Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(token); return true; }
+        catch (Exception e) { return false; }
     }
 
-    public Claims parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    public Jws<Claims> parseToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(secret.getBytes()).build().parseClaimsJws(token);
     }
 }

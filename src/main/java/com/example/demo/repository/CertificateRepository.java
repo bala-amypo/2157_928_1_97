@@ -1,14 +1,8 @@
 package com.example.demo.repository;
-
-import com.example.demo.entity.Certificate;
-import com.example.demo.entity.Student;
+import com.example.demo.entity.*;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import java.util.List;
-import java.util.Optional;
-
-@Repository
+import java.util.*;
 public interface CertificateRepository extends JpaRepository<Certificate, Long> {
-    Optional<Certificate> findByVerificationCode(String verificationCode);
+    Optional<Certificate> findByVerificationCode(String code);
     List<Certificate> findByStudent(Student student);
 }
