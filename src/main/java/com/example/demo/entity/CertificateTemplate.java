@@ -1,12 +1,8 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 @Entity
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@Builder
 public class CertificateTemplate {
 
     @Id
@@ -17,4 +13,15 @@ public class CertificateTemplate {
     private String templateName;
 
     private String backgroundUrl;
+
+    public CertificateTemplate() {}
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getTemplateName() { return templateName; }
+    public void setTemplateName(String templateName) { this.templateName = templateName; }
+
+    public String getBackgroundUrl() { return backgroundUrl; }
+    public void setBackgroundUrl(String backgroundUrl) { this.backgroundUrl = backgroundUrl; }
 }
