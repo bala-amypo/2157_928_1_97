@@ -1,45 +1,22 @@
 package com.example.demo.security;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-
-import java.security.Key;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.stereotype.Component;
 import java.util.Date;
-import java.util.Map;
 
+@Component
 public class JwtUtil {
 
-    private final Key key;
-    private final long expiration;
+    private final String SECRET = "mysecretkey12345"; // use a strong key in production
+    private final long EXPIRATION = 1000 * 60 * 60; // 1 hour
 
-    public JwtUtil(String secret, long expiration) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expiration = expiration;
-    }
-
-    public String generateToken(Map<String, Object> claims, String subject) {
+    public String generateToken(String email) {
         return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
+                .setSubject(email)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(key, SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
                 .compact();
-    }
-
-    public boolean validateToken(String token) {
-        try {
-            parseToken(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    public Jws<Claims> parseToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token);
     }
 }
