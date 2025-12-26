@@ -1,37 +1,24 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.CertificateTemplate;
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CertificateTemplateRepository;
 import com.example.demo.service.TemplateService;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 
-@Service
 public class TemplateServiceImpl implements TemplateService {
+    private final CertificateTemplateRepository repo;
 
-    private final CertificateTemplateRepository templateRepository;
-
-    public TemplateServiceImpl(CertificateTemplateRepository templateRepository) {
-        this.templateRepository = templateRepository;
+    public TemplateServiceImpl(CertificateTemplateRepository repo) {
+        this.repo = repo;
     }
 
-    @Override
-    public CertificateTemplate saveTemplate(CertificateTemplate template) {
-        return templateRepository.save(template);
+    public CertificateTemplate addTemplate(CertificateTemplate t) {
+        if (repo.findByTemplateName(t.getTemplateName()).isPresent())
+            throw new RuntimeException("Template name exists");
+        return repo.save(t);
     }
 
-    @Override
-    public List<CertificateTemplate> getAllTemplates() {
-        return templateRepository.findAll();
-    }
-
-    @Override
-    public CertificateTemplate getTemplateById(Long id) {
-        return templateRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "CertificateTemplate not found with id: " + id));
+    public List<CertificateTemplate> getAll() {
+        return repo.findAll();
     }
 }

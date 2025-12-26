@@ -1,60 +1,26 @@
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Component;
+import java.util.*;
 
-import java.security.Key;
-import java.util.Date;
-
-@Component
 public class JwtUtil {
+    private final String secret;
+    private final long exp;
 
-    private final Key secretKey;
-    private final long expiration;
+    public JwtUtil(String s, long e) { secret = s; exp = e; }
 
-    // Default constructor for Spring injection
-    public JwtUtil() {
-        this.secretKey = Keys.hmacShaKeyFor("abcdefghijklmnopqrstuvwxyz0123456789ABCD".getBytes());
-        this.expiration = 3600000L;  // 1 hour
+    public String generateToken(Map<String,Object> claims, String sub) {
+        return Jwts.builder().setClaims(claims).setSubject(sub)
+                .setExpiration(new Date(System.currentTimeMillis()+exp))
+                .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
-    // Constructor for manual creation
-    public JwtUtil(String secret, long expiration) {
-        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
-        this.expiration = expiration;
+    public boolean validateToken(String t) {
+        try { Jwts.parser().setSigningKey(secret).parseClaimsJws(t); return true; }
+        catch(Exception e){ return false; }
     }
 
-    // Generate token
-    public String generateToken(String email) {
-        return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(secretKey, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    // Validate token
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    // Extract email from token
-    public String extractEmail(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+    public Jws<Claims> parseToken(String t) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(t);
     }
 }

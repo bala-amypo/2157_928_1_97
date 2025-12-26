@@ -1,34 +1,45 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Certificate;
-import com.example.demo.repository.CertificateRepository;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
 import com.example.demo.service.CertificateService;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
-@Service  // ⭐ VERY IMPORTANT
 public class CertificateServiceImpl implements CertificateService {
+    private final CertificateRepository certRepo;
+    private final StudentRepository studentRepo;
+    private final CertificateTemplateRepository templateRepo;
 
-    private final CertificateRepository certificateRepository;
-
-    public CertificateServiceImpl(CertificateRepository certificateRepository) {
-        this.certificateRepository = certificateRepository;
+    public CertificateServiceImpl(CertificateRepository c, StudentRepository s, CertificateTemplateRepository t) {
+        certRepo = c; studentRepo = s; templateRepo = t;
     }
 
-    @Override
-    public Certificate save(Certificate certificate) {
-        return certificateRepository.save(certificate);
+    public Certificate generateCertificate(Long sid, Long tid) {
+        Student s = studentRepo.findById(sid).orElseThrow();
+        CertificateTemplate t = templateRepo.findById(tid).orElseThrow();
+
+        Certificate c = Certificate.builder()
+                .student(s)
+                .template(t)
+                .verificationCode("VC-" + UUID.randomUUID())
+                .qrCodeUrl("data:image/png;base64,XXXX")
+                .build();
+        return certRepo.save(c);
     }
 
-    @Override
-    public List<Certificate> findAll() {
-        return certificateRepository.findAll();
+    public Certificate getCertificate(Long id) {
+        return certRepo.findById(id).orElseThrow(() ->
+                new RuntimeException("Certificate not found"));
     }
 
-    @Override
-    public Certificate findById(Long id) {
-        return certificateRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Certificate not found"));
+    public Certificate findByVerificationCode(String code) {
+        return certRepo.findByVerificationCode(code).orElseThrow(() ->
+                new RuntimeException("Certificate not found"));
+    }
+
+    public List<Certificate> findByStudentId(Long id) {
+        Student s = studentRepo.findById(id).orElseThrow();
+        return certRepo.findByStudent(s);
     }
 }
