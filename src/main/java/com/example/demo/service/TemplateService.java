@@ -9,5 +9,5 @@ public interface TemplateService {
 
     List<CertificateTemplate> getAllTemplates();
 
-    CertificateTemplate getByName(String templateName);
+    CertificateTemplate getTemplateById(Long id);
 }
