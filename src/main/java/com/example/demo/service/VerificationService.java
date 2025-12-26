@@ -4,5 +4,6 @@ import com.example.demo.entity.Certificate;
 
 public interface VerificationService {
 
-    Certificate verify(String verificationCode, String ipAddress);
+    // Single parameter for verification code
+    Certificate verify(String verificationCode);
 }
