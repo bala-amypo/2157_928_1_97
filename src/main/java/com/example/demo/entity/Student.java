@@ -10,15 +10,15 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
-
-    private String name;
 
     @Column(unique = true)
     private String rollNumber;
 
-    // Getters and Setters
+    private String name;
+
+    // getters & setters
     public Long getId() {
         return id;
     }
@@ -35,19 +35,19 @@ public class Student {
         this.email = email;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getRollNumber() {
         return rollNumber;
     }
 
     public void setRollNumber(String rollNumber) {
         this.rollNumber = rollNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
