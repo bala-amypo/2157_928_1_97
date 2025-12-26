@@ -14,7 +14,7 @@
     <name>digital-certificate-system</name>
     <description>Spring Boot TestNG Project</description>
 
-    <!-- ✅ SPRING BOOT VERSION -->
+    <!-- SPRING BOOT -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -28,30 +28,25 @@
 
     <dependencies>
 
-        <!-- ===================== -->
-        <!-- SPRING BOOT CORE -->
-        <!-- ===================== -->
+        <!-- SPRING WEB -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- ===================== -->
         <!-- SECURITY -->
-        <!-- ===================== -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-        <!-- ===================== -->
         <!-- JWT -->
-        <!-- ===================== -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
@@ -72,18 +67,14 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ===================== -->
-        <!-- DATABASE (H2) -->
-        <!-- ===================== -->
+        <!-- H2 DATABASE -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- ===================== -->
         <!-- LOMBOK -->
-        <!-- ===================== -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -102,7 +93,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Mockito -->
+        <!-- Mockito (ONLY core) -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -110,14 +101,7 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-testng</artifactId>
-            <version>0.5.1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Spring Test -->
+        <!-- Spring Boot Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -132,19 +116,16 @@
 
     </dependencies>
 
-    <!-- ===================== -->
-    <!-- TEST RUNNER CONFIG -->
-    <!-- ===================== -->
     <build>
         <plugins>
 
-            <!-- Spring Boot -->
+            <!-- SPRING BOOT PLUGIN -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!-- Surefire for TestNG -->
+            <!-- TESTNG RUNNER -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
