@@ -7,20 +7,18 @@ import java.util.List;
 
 @Service
 public class TemplateServiceImpl implements TemplateService {
-    private final CertificateTemplateRepository templateRepository;
-    public TemplateServiceImpl(CertificateTemplateRepository templateRepository) { this.templateRepository = templateRepository; }
+    private final CertificateTemplateRepository repo;
+    public TemplateServiceImpl(CertificateTemplateRepository repo) { this.repo = repo; }
 
     @Override
     public CertificateTemplate addTemplate(CertificateTemplate template) {
-        if (templateRepository.findByTemplateName(template.getTemplateName()).isPresent()) throw new RuntimeException("Template name exists");
-        return templateRepository.save(template);
+        if (repo.findByTemplateName(template.getTemplateName()).isPresent()) throw new RuntimeException("Template name exists");
+        return repo.save(template);
     }
 
     @Override
-    public List<CertificateTemplate> getAllTemplates() { return templateRepository.findAll(); }
+    public List<CertificateTemplate> getAllTemplates() { return repo.findAll(); }
 
     @Override
-    public CertificateTemplate findById(Long id) {
-        return templateRepository.findById(id).orElse(null);
-    }
+    public CertificateTemplate findById(Long id) { return repo.findById(id).orElse(null); }
 }
