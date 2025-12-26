@@ -10,29 +10,19 @@ import java.util.List;
 @RequestMapping("/templates")
 public class TemplateController {
 
-    private final TemplateService templateService;
+    private final TemplateService service;
 
-    public TemplateController(TemplateService templateService) {
-        this.templateService = templateService;
+    public TemplateController(TemplateService service) {
+        this.service = service;
     }
 
-    // POST /templates
     @PostMapping
-    public CertificateTemplate addTemplate(
-            @RequestBody CertificateTemplate template) {
-        return templateService.saveTemplate(template);
+    public CertificateTemplate add(@RequestBody CertificateTemplate t) {
+        return service.addTemplate(t);
     }
 
-    // GET /templates
     @GetMapping
-    public List<CertificateTemplate> getAllTemplates() {
-        return templateService.getAllTemplates();
-    }
-
-    // GET /templates/{id}
-    @GetMapping("/{id}")
-    public CertificateTemplate getTemplateById(
-            @PathVariable Long id) {
-        return templateService.getTemplateById(id);
+    public List<CertificateTemplate> list() {
+        return service.getAllTemplates();
     }
 }

@@ -10,19 +10,19 @@ import java.util.List;
 @RequestMapping("/students")
 public class StudentController {
 
-    private final StudentService studentService;
+    private final StudentService service;
 
-    public StudentController(StudentService studentService) {
-        this.studentService = studentService;
+    public StudentController(StudentService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public Student create(@RequestBody Student student) {
-        return studentService.saveStudent(student);
+    public Student add(@RequestBody Student s) {
+        return service.addStudent(s);
     }
 
     @GetMapping
-    public List<Student> all() {
-        return studentService.getAllStudents();
+    public List<Student> list() {
+        return service.getAllStudents();
     }
 }
