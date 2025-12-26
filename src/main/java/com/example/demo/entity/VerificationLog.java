@@ -6,17 +6,20 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Data
+@Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class VerificationLog {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
-    private String ipAddress;
+    @ManyToOne
+    private Certificate certificate;
 
-    private LocalDateTime verifiedAt = LocalDateTime.now();
+    private LocalDateTime verifiedAt;
+
+    private String status;
+
+    private String ipAddress;
 }

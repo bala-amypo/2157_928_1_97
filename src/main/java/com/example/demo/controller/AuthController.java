@@ -5,32 +5,38 @@ import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
+@RestController
+@RequestMapping("/auth")
 public class AuthController {
-    private final UserService svc;
-    private final JwtUtil jwt;
 
-    public AuthController(UserService s, JwtUtil j) {
-        svc = s; jwt = j;
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
+
+    public AuthController(UserService userService, JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
-    public ResponseEntity<?> register(RegisterRequest r) {
-        User u = svc.register(User.builder()
-                .name(r.getName()).email(r.getEmail())
-                .password(r.getPassword()).role(r.getRole()).build());
-        return ResponseEntity.ok(u);
+    @PostMapping("/register")
+    public ResponseEntity<User> register(@RequestBody RegisterRequest req) {
+        User user = User.builder()
+                .name(req.getName())
+                .email(req.getEmail())
+                .password(req.getPassword())
+                .role(req.getRole())
+                .build();
+        return ResponseEntity.ok(userService.register(user));
     }
 
-    public ResponseEntity<?> login(AuthRequest r) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest req) {
         try {
-            User u = svc.findByEmail(r.getEmail());
-            String t = jwt.generateToken(
-                    Map.of("email", u.getEmail(), "role", u.getRole()),
-                    u.getEmail());
-            return ResponseEntity.ok(new AuthResponse(t));
-        } catch(Exception e) {
+            User user = userService.findByEmail(req.getEmail());
+            String token = jwtUtil.generateToken(user.getEmail());
+            return ResponseEntity.ok(new AuthResponse(token));
+        } catch (Exception e) {
             return ResponseEntity.status(401).build();
         }
     }
