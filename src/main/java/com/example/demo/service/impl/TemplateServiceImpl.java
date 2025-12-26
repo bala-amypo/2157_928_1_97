@@ -1,18 +1,19 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.CertificateTemplate;
-import com.example.demo.repository.TemplateRepository;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.CertificateTemplateRepository;
 import com.example.demo.service.TemplateService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service   // 🔥 WITHOUT THIS, ERROR WILL COME
+@Service
 public class TemplateServiceImpl implements TemplateService {
 
-    private final TemplateRepository templateRepository;
+    private final CertificateTemplateRepository templateRepository;
 
-    public TemplateServiceImpl(TemplateRepository templateRepository) {
+    public TemplateServiceImpl(CertificateTemplateRepository templateRepository) {
         this.templateRepository = templateRepository;
     }
 
@@ -27,8 +28,10 @@ public class TemplateServiceImpl implements TemplateService {
     }
 
     @Override
-    public CertificateTemplate getByName(String templateName) {
-        return templateRepository.findByTemplateName(templateName)
-                .orElseThrow(() -> new RuntimeException("Template not found"));
+    public CertificateTemplate getTemplateById(Long id) {
+        return templateRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "CertificateTemplate not found with id: " + id));
     }
 }
