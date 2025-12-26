@@ -3,6 +3,4 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class SwaggerConfig {
-    // existence test only
-}
+public class SwaggerConfig {}
