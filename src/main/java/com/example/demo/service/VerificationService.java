@@ -4,6 +4,6 @@ import com.example.demo.entity.Certificate;
 
 public interface VerificationService {
 
-    // Accept both verificationCode and email
+    // Updated to accept two parameters
     Certificate verify(String verificationCode, String email);
 }

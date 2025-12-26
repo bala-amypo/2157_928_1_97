@@ -11,6 +11,6 @@ public interface CertificateRepository extends JpaRepository<Certificate, Long> 
 
     Optional<Certificate> findByVerificationCode(String verificationCode);
 
-    // Add this method for Option 1
+    // Needed for verify(String verificationCode, String email)
     Optional<Certificate> findByVerificationCodeAndStudentEmail(String verificationCode, String email);
 }
