@@ -4,7 +4,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity @Table(name = "verification_logs")
-@Data @Builder @NoArgsConstructor @AllArgsConstructor
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class VerificationLog {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
