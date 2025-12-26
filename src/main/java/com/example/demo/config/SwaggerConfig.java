@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import java.util.List;
 
 @Configuration
@@ -21,8 +22,8 @@ public class SwaggerConfig {
                         .version("1.0")
                         .description("Digital Certificate Generator API with JWT Authentication"))
                 .servers(List.of(
-                        // Updated to match your current browser URL in the screenshot
-                        new Server().url("https://9171.408procr.amypo.ai/") 
+                        // Updated to match your current browser URL
+                        new Server().url("https://9171.408procr.amypo.ai/")
                 ))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
@@ -30,6 +31,7 @@ public class SwaggerConfig {
                                 .name("bearerAuth")
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
-                                .bearerFormat("JWT")));
+                                .bearerFormat("JWT"))
+                );
     }
 }
