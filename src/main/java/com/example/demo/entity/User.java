@@ -1,15 +1,26 @@
 package com.example.demo.entity;
+
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity @Table(name = "users")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
+@Entity
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class User {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-    @Column(unique = true)
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private String password;
-    private String role; // ADMIN or STAFF
+
+    private String role;
 }
