@@ -17,8 +17,8 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public Certificate verify(String verificationCode) {
-        return certificateRepository.findByVerificationCode(verificationCode)
-                .orElseThrow(() -> new RuntimeException("Certificate not found with code: " + verificationCode));
+    public Certificate verify(String verificationCode, String email) {
+        return certificateRepository.findByVerificationCodeAndStudentEmail(verificationCode, email)
+                .orElseThrow(() -> new RuntimeException("Certificate not found for this code and email"));
     }
 }

@@ -10,4 +10,7 @@ import java.util.Optional;
 public interface CertificateRepository extends JpaRepository<Certificate, Long> {
 
     Optional<Certificate> findByVerificationCode(String verificationCode);
+
+    // Add this method for Option 1
+    Optional<Certificate> findByVerificationCodeAndStudentEmail(String verificationCode, String email);
 }
