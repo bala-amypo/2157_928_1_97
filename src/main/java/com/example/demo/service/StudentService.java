@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface StudentService {
 
-    Student saveStudent(Student student);
-
-    Student getStudentByEmail(String email);
+    Student addStudent(Student student);
 
     List<Student> getAllStudents();
+
+    Student findById(Long id);
 }

@@ -1,8 +1,13 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.CertificateTemplate;
+import com.example.demo.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CertificateTemplateRepository
-        extends JpaRepository<CertificateTemplate, Long> {
+import java.util.Optional;
+
+public interface StudentRepository extends JpaRepository<Student, Long> {
+
+    Optional<Student> findByEmail(String email);
+
+    Optional<Student> findByRollNumber(String rollNumber);
 }
