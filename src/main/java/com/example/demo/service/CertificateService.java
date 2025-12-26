@@ -1,13 +1,16 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.Certificate;
+
 import java.util.List;
 
 public interface CertificateService {
 
-    Certificate save(Certificate certificate);
+    Certificate generateCertificate(Long studentId, Long templateId);
 
-    List<Certificate> findAll();
+    Certificate getCertificate(Long id);
 
-    Certificate findById(Long id);
+    Certificate findByVerificationCode(String code);
+
+    List<Certificate> findByStudentId(Long studentId);
 }
