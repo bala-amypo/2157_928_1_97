@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CertificateRepository extends JpaRepository<Certificate, Long> {
 
-    // Add this method for VerificationServiceImpl
     Optional<Certificate> findByVerificationCode(String verificationCode);
 }
