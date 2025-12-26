@@ -1,25 +1,27 @@
 package com.example.demo.security;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 
+import java.security.Key;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private final String secret;
+    private final Key secretKey;
     private final long expiration;
 
     // Default constructor for Spring injection
     public JwtUtil() {
-        this.secret = "mySecretKey"; // You can change this
+        this.secretKey = Keys.hmacShaKeyFor("abcdefghijklmnopqrstuvwxyz0123456789ABCD".getBytes());
         this.expiration = 3600000L;  // 1 hour
     }
 
-    // Constructor if you want to create manually
+    // Constructor for manual creation
     public JwtUtil(String secret, long expiration) {
-        this.secret = secret;
+        this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
         this.expiration = expiration;
     }
 
@@ -29,14 +31,17 @@ public class JwtUtil {
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     // Validate token
     public boolean validateToken(String token) {
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
             return false;
@@ -45,8 +50,9 @@ public class JwtUtil {
 
     // Extract email from token
     public String extractEmail(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
