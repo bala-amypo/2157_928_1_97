@@ -1,57 +1,41 @@
-package com.example.demo.controller;
+package com.example.demo.service.impl;
 
-import com.example.demo.dto.*;
 import com.example.demo.entity.User;
-import com.example.demo.security.JwtUtil;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
-@RestController
-@RequestMapping("/auth")
-public class AuthController {
+@Service   // ⭐ VERY IMPORTANT
+public class UserServiceImpl implements UserService {
 
-    private final UserService userService;
-    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public AuthController(UserService userService, JwtUtil jwtUtil) {
-        this.userService = userService;
-        this.jwtUtil = jwtUtil;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody RegisterRequest req) {
-
-        User user = User.builder()
-                .name(req.getName())
-                .email(req.getEmail())
-                .password(req.getPassword())
-                .role(req.getRole())
-                .build();
-
-        User saved = userService.register(user);
-        return ResponseEntity.ok(saved);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest req) {
-
-        try {
-            User user = userService.findByEmail(req.getEmail());
-
-            Map<String, Object> claims = new HashMap<>();
-            claims.put("userId", user.getId());
-            claims.put("email", user.getEmail());
-            claims.put("role", user.getRole());
-
-            String token = jwtUtil.generateToken(claims, user.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token));
-
-        } catch (RuntimeException ex) {
-            return ResponseEntity.status(401).body("Invalid credentials");
+    @Override
+    public User register(User user) {
+        Optional<User> existing = userRepository.findByEmail(user.getEmail());
+        if (existing.isPresent()) {
+            throw new RuntimeException("User already exists");
         }
+
+        if (user.getRole() == null) {
+            user.setRole("STAFF"); // test expects default STAFF
+        }
+
+        user.setPassword(encoder.encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }
