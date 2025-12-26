@@ -8,23 +8,27 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final UserRepository repo;
-    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public UserServiceImpl(UserRepository repo) {
-        this.repo = repo;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public User register(User user) {
-        repo.findByEmail(user.getEmail()).ifPresent(u -> { throw new RuntimeException("User email exists"); });
-        if (user.getRole() == null) user.setRole("STAFF");
-        user.setPassword(encoder.encode(user.getPassword()));
-        return repo.save(user);
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email exists");
+        }
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("STAFF");
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override
     public User findByEmail(String email) {
-        return repo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        return userRepository.findByEmail(email).orElse(null);
     }
 }
