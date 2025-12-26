@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SwaggerConfig {
     @Bean
-    public OpenAPI customOpenAPI() {
-        return new OpenAPI().info(new Info().title("Digital Certificate API").version("1.0"));
+    public OpenAPI api() {
+        return new OpenAPI()
+                .info(new Info().title("Digital Certificate API").version("1.0").description("API documentation"));
     }
 }
