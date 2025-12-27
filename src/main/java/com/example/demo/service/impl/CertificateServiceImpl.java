@@ -1,8 +1,12 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.Certificate;
+import com.example.demo.entity.CertificateTemplate;
+import com.example.demo.entity.Student;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.*;
+import com.example.demo.repository.CertificateRepository;
+import com.example.demo.repository.CertificateTemplateRepository;
+import com.example.demo.repository.StudentRepository;
 import com.example.demo.service.CertificateService;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
@@ -36,7 +40,6 @@ public class CertificateServiceImpl implements CertificateService {
         CertificateTemplate t = templateRepository.findById(templateId)
                 .orElseThrow(() -> new ResourceNotFoundException("Template not found"));
 
-        // VC- prefix required for Test 28
         String vCode = "VC-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
         String qrUrl = "";
         try {
@@ -44,15 +47,22 @@ public class CertificateServiceImpl implements CertificateService {
             BitMatrix matrix = writer.encode(vCode, BarcodeFormat.QR_CODE, 200, 200);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             MatrixToImageWriter.writeToStream(matrix, "PNG", bos);
-            // data:image prefix required for Test 29
             qrUrl = "data:image/png;base64," + Base64.getEncoder().encodeToString(bos.toByteArray());
-        } catch (Exception e) { 
-            throw new RuntimeException("QR Generation failed"); 
+        } catch (Exception e) {
+            throw new RuntimeException("QR Generation failed");
         }
 
-        return certificateRepository.save(Certificate.builder()
-                .student(s).template(t).issuedDate(LocalDate.now())
-                .verificationCode(vCode).qrCodeUrl(qrUrl).build());
+        // 🔴 Fix applied: explicitly set issuedDate to avoid DB null error
+        Certificate certificate = Certificate.builder()
+                .student(s)
+                .template(t)
+                .verificationCode(vCode)
+                .qrCodeUrl(qrUrl)
+                .build();
+
+        certificate.setIssuedDate(LocalDate.now());  // ✅ THIS LINE FIXES THE ERROR
+
+        return certificateRepository.save(certificate);
     }
 
     @Override
