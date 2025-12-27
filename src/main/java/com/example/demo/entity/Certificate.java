@@ -23,6 +23,7 @@ public class Certificate {
     @Column(columnDefinition = "LONGTEXT")
     private String qrCodeUrl;
 
+    @Column(nullable = false)
     private LocalDate issuedDate;
 
     @ManyToOne
@@ -32,4 +33,9 @@ public class Certificate {
     @ManyToOne
     @JoinColumn(name = "template_id")
     private CertificateTemplate template;
+
+    @PrePersist
+    public void setIssuedDate() {
+        this.issuedDate = LocalDate.now();
+    }
 }
